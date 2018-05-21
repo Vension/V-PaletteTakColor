@@ -4,5 +4,5 @@
 - gif
 
 <div style="display:flex;">
-   <img alt="image" src="https://github.com/Vension/V-PaletteTakColor/blob/master/gif/GIF.gif" >
+   <img alt="image" src="https://github.com/Vension/V-PaletteTakColor/blob/master/gif/gif.gif" >
  </details>
