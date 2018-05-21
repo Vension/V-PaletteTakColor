@@ -1,117 +1,184 @@
 package com.vension.palettetakcolor;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.vension.palettetakcolor.util.ColorUtils;
+import com.vension.palettetakcolor.util.DisplayUtils;
 
 import java.util.List;
 
+/**
+ * ========================================================
+ * 作  者：Vension
+ * 日  期：2018/5/21 17:06
+ * 描  述：Palette - 提取图片主色调
+ * ========================================================
+ */
+
 public class MainActivity extends AppCompatActivity {
 
-	private Toolbar toolbar;
-	private TabLayout toolbar_tab;
-	private ViewPager main_vp_container;
+	private LinearLayout mContainerLayout;
+
+	private ImageView mPictureIv;
+
+	private TextView mVibrantColorTv;
+	private TextView mDarkVibrantColorTv;
+	private TextView mLightVibrantColorTv;
+
+	private TextView mMutedColorTv;
+	private TextView mDarkMutedColorTv;
+	private TextView mLightMutedColorTv;
+
+	private TextView mDominantColorTv;
+	private Button btnUseViewpage;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+		mPictureIv = (ImageView) findViewById(R.id.iv_picture);
+		mVibrantColorTv = (TextView) findViewById(R.id.tv_color_vibrant);
+		mDarkVibrantColorTv = (TextView) findViewById(R.id.tv_color_vibrant_dark);
+		mLightVibrantColorTv = (TextView) findViewById(R.id.tv_color_vibrant_light);
+		mMutedColorTv = (TextView) findViewById(R.id.tv_color_muted);
+		mDarkMutedColorTv = (TextView) findViewById(R.id.tv_color_muted_dark);
+		mLightMutedColorTv = (TextView) findViewById(R.id.tv_color_muted_light);
+		mDominantColorTv = (TextView) findViewById(R.id.tv_color_dominant);
+
+		mContainerLayout = (LinearLayout) findViewById(R.id.ll_container);
+		btnUseViewpage = findViewById(R.id.btn_use_viewpage);
+		btnUseViewpage.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				finish();
+				startActivity(new Intent(MainActivity.this,UseViewPageActivity.class));
 			}
 		});
-
-		toolbar_tab = (TabLayout) findViewById(R.id.toolbar_tab);
-		main_vp_container = (ViewPager) findViewById(R.id.main_vp_container);
-
-		PaletteViewPagerAdapter vpAdapter = new PaletteViewPagerAdapter(getSupportFragmentManager(), this);
-		main_vp_container.setAdapter(vpAdapter);
-		toolbar_tab.setupWithViewPager(main_vp_container);
-		changeTopBgColor(0);
-		main_vp_container.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int
-					positionOffsetPixels) {
-
-			}
-
-			@Override
-			public void onPageSelected(int position) {
-				changeTopBgColor(position);
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int state) {
-
-			}
-		});
+		initPalette();
 	}
 
-	/**
-	 * 根据Palette提取的颜色，修改tab和toolbar以及状态栏的颜色
-	 */
-	private void changeTopBgColor(int position) {
-		// 用来提取颜色的Bitmap
-		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), PaletteFragment
-				.getBackgroundBitmapPosition(position));
-		// Palette的部分
-		Palette.Builder builder = Palette.from(bitmap);
-		builder.generate(new Palette.PaletteAsyncListener() {
+	private void setPaletteColor(TextView tv, int color) {
+		tv.setBackgroundColor(color);
+		tv.setText(ColorUtils.toRGBHexString(color));
+		tv.setTextColor(ColorUtils.parseBackgroundColor(color));
+	}
+
+	private void initPalette() {
+		Drawable drawable = mPictureIv.getDrawable();
+		Bitmap bitmap = drawableToBitmap(drawable);
+
+		// Synchronous
+		// mPalette = Palette.from(bitmap).generate();
+
+		// Asynchronous
+		Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
 			@Override
 			public void onGenerated(Palette palette) {
-				if (palette != null){
-					List<Palette.Swatch> swatches = palette.getSwatches();
-					Log.e("onGenerated",swatches.toString());
-					//获取到充满活力的这种色调
-					Palette.Swatch vibrant = palette.getVibrantSwatch();
-					//根据调色板Palette获取到图片中的颜色设置到toolbar和tab中背景，标题等，使整个UI界面颜色统一
-					toolbar_tab.setBackgroundColor(vibrant.getRgb());
-					toolbar_tab.setSelectedTabIndicatorColor(colorBurn(vibrant.getRgb()));
-					toolbar.setBackgroundColor(vibrant.getRgb());
+				// Use generated instance
+				int defaultColor = Color.parseColor("#b64242");
 
-					if (android.os.Build.VERSION.SDK_INT >= 21) {
-						Window window = getWindow();
-						window.setStatusBarColor(colorBurn(vibrant.getRgb()));
-						window.setNavigationBarColor(colorBurn(vibrant.getRgb()));
+				int mVibrantColor = palette.getVibrantColor(defaultColor);
+				int mDarkVibrantColor = palette.getDarkVibrantColor(defaultColor);
+				int mLightVibrantColor = palette.getLightVibrantColor(defaultColor);
+				int mMutedColor = palette.getMutedColor(defaultColor);
+				int mDarkMutedColor = palette.getDarkMutedColor(defaultColor);
+				int mLightMutedColor = palette.getLightMutedColor(defaultColor);
+
+				setPaletteColor(mVibrantColorTv, mVibrantColor);
+				setPaletteColor(mDarkVibrantColorTv, mDarkVibrantColor);
+				setPaletteColor(mLightVibrantColorTv, mLightVibrantColor);
+				setPaletteColor(mMutedColorTv, mMutedColor);
+				setPaletteColor(mDarkMutedColorTv, mDarkMutedColor);
+				setPaletteColor(mLightMutedColorTv, mLightMutedColor);
+
+				// dominant color (主色)
+				int mDominantColor = palette.getDominantColor(defaultColor);
+				setPaletteColor(mDominantColorTv, mDominantColor);
+
+				// Swatch - 色块 // 15种
+				List<Palette.Swatch> mSwatchList = palette.getSwatches();
+				Toast.makeText(MainActivity.this, "Swatch num: " + mSwatchList.size(), Toast.LENGTH_SHORT).show();
+				int index = -1;
+				LinearLayout mSwatchesContainer = null;
+				LinearLayout.LayoutParams params;
+				for (Palette.Swatch swatch : mSwatchList) {
+					int color = swatch.getRgb();
+					index++;
+
+					if (index % 3 == 0) {
+						mSwatchesContainer = new LinearLayout(getApplicationContext());
+						mSwatchesContainer.setOrientation(LinearLayout.HORIZONTAL);
+						params = new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.MATCH_PARENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT
+						);
+						params.topMargin = (int) DisplayUtils.dp2px(getApplicationContext(), 10);
+						mContainerLayout.addView(mSwatchesContainer, params);       //
 					}
-				}
 
+					LinearLayout mSwatchContainer = new LinearLayout(getApplicationContext());
+					mSwatchContainer.setOrientation(LinearLayout.VERTICAL);
+					params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+					params.weight = 1;
+					params.gravity = Gravity.CENTER;
+					if (mSwatchesContainer != null) {
+						mSwatchesContainer.addView(mSwatchContainer, params);       //
+					}
+
+					TextView mColorTv = new TextView(getApplicationContext());
+					mColorTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+					setPaletteColor(mColorTv, color);           //
+					mColorTv.setGravity(Gravity.CENTER);
+					params = new LinearLayout.LayoutParams(
+							LinearLayout.LayoutParams.MATCH_PARENT,
+							(int) DisplayUtils.dp2px(getApplicationContext(), 80)
+					);
+					params.gravity = Gravity.CENTER;
+					mSwatchContainer.addView(mColorTv, params);                 //
+
+					TextView mColorNameTv = new TextView(getApplicationContext());
+					mColorNameTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+					mColorNameTv.setText("Swatch " + index);
+					mColorNameTv.setGravity(Gravity.CENTER);
+					mColorNameTv.setTextColor(Color.parseColor("#333333"));
+					params = new LinearLayout.LayoutParams(
+							LinearLayout.LayoutParams.WRAP_CONTENT,
+							LinearLayout.LayoutParams.WRAP_CONTENT
+					);
+					params.gravity = Gravity.CENTER;
+					mSwatchContainer.addView(mColorNameTv, params);
+				}
 			}
 		});
 	}
 
-	/**
-	 * 颜色加深处理
-	 *
-	 * @param RGBValues RGB的值，由alpha（透明度）、red（红）、green（绿）、blue（蓝）构成，
-	 *                  Android中我们一般使用它的16进制，
-	 *                  例如："#FFAABBCC",最左边到最右每两个字母就是代表alpha（透明度）、
-	 *                  red（红）、green（绿）、blue（蓝）。每种颜色值占一个字节(8位)，值域0~255
-	 *                  所以下面使用移位的方法可以得到每种颜色的值，然后每种颜色值减小一下，在合成RGB颜色，颜色就会看起来深一些了
-	 * @return
-	 */
-	private int colorBurn(int RGBValues) {
-		int alpha = RGBValues >> 24;
-		int red = RGBValues >> 16 & 0xFF;
-		int green = RGBValues >> 8 & 0xFF;
-		int blue = RGBValues & 0xFF;
-		red = (int) Math.floor(red * (1 - 0.1));
-		green = (int) Math.floor(green * (1 - 0.1));
-		blue = (int) Math.floor(blue * (1 - 0.1));
-		return Color.rgb(red, green, blue);
+	public static Bitmap drawableToBitmap(Drawable drawable) {
+		Bitmap bitmap = Bitmap.createBitmap(
+				drawable.getIntrinsicWidth(),
+				drawable.getIntrinsicHeight(),
+				drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(bitmap); // canvas -> bitmap
+		//canvas.setBitmap(bitmap);
+		drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+		drawable.draw(canvas);      // drawable -> canvas
+		return bitmap;  // drawable -> canvas -> bitmap
 	}
 
 }

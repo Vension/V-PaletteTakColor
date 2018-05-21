@@ -32,8 +32,8 @@ public class PaletteFragment extends Fragment {
     private static final String ARG_POSITION = "position";
 
     private int position;
-    private static final int[] drawables = {R.mipmap.one, R.mipmap.two, R.mipmap.four, R.mipmap
-            .three, R.mipmap.five};
+    private static final int[] drawables = {R.mipmap.kobe_1, R.mipmap.kobe_2, R.mipmap.kobe_3, R.mipmap
+            .kobe_4, R.mipmap.kobe_5};
 
     public static PaletteFragment newInstance(int position) {
         PaletteFragment f = new PaletteFragment();

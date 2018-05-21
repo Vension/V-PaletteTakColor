@@ -1,65 +1,239 @@
-<LinearLayout
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        app:subtitleTextColor="@color/white"
-        app:title="Palette"
-        app:titleTextColor="@color/white"
-        >
-    </android.support.v7.widget.Toolbar>
-
-    <android.support.design.widget.TabLayout
-        android:id="@+id/toolbar_tab"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark"
-        android:fillViewport="false"
-        app:layout_scrollFlags="scroll"
-        app:tabIndicatorColor="#0835f8"
-        app:tabIndicatorHeight="2.0dp"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="#090e21">
-
-        <android.support.design.widget.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="主页"/>
-
-        <android.support.design.widget.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="分享"/>
-
-        <android.support.design.widget.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="收藏"/>
-
-        <android.support.design.widget.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="关注"/>
-
-        <android.support.design.widget.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="微博"/>
-
-
-    </android.support.design.widget.TabLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/main_vp_container"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:layout_marginBottom="60dip">
+        <LinearLayout
+            android:id="@+id/ll_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dip">
 
-</LinearLayout>
+            <!--Picture-->
+            <ImageView
+                android:id="@+id/iv_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="centerInside"
+                android:src="@mipmap/kobe" />
+
+            <!--Vibrant Color-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_color_vibrant"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="#b64242"
+                        android:gravity="center"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Vibrant"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="80dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_color_vibrant_dark"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="#b64242"
+                        android:gravity="center"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Vibrant Dark"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="80dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_color_vibrant_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="#b64242"
+                        android:gravity="center"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Vibrant Light"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--Muted Color-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_color_muted"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="#b64242"
+                        android:gravity="center"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Muted"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="80dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_color_muted_dark"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="#b64242"
+                        android:gravity="center"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Muted Dark"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="80dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_color_muted_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="#b64242"
+                        android:gravity="center"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Muted Light"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--Dominant Color-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_color_dominant"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="#b64242"
+                        android:gravity="center"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Dominant"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_use_viewpage"
+        android:layout_width="match_parent"
+        android:layout_height="42dip"
+        android:layout_margin="12dip"
+        android:background="@drawable/shape_rect_bg_main_radius_8"
+        android:textColor="@color/white"
+        android:text="结合ViewPager使用"
+        android:layout_gravity="bottom"/>
+</FrameLayout>
